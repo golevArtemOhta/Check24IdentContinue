@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.checkidenttask.domain.model.SaleItem
 import com.example.checkidenttask.presentation.destinations.NewItemScreenDestination
 import com.example.reviewcodetechtask.R
 import com.ramcosta.composedestinations.annotation.Destination
@@ -55,7 +56,10 @@ fun ItemsScreen(navigator: DestinationsNavigator, viewModel: ItemsViewModel = ko
                     Item(
                         title = saleItem.title,
                         description = saleItem.description ?: "without description",
-                        price = saleItem.price ?: 0.0
+                        price = saleItem.price ?: 0.0,
+                        clickByItem = {
+                            navigator.navigate(NewItemScreenDestination(saleItemId = saleItem.id))
+                        }
                     )
                 }
 
@@ -71,7 +75,7 @@ fun ItemsScreen(navigator: DestinationsNavigator, viewModel: ItemsViewModel = ko
 
 
         Button(onClick = {
-            navigator.navigate(NewItemScreenDestination)
+            navigator.navigate(NewItemScreenDestination())
                          },
             colors = ButtonDefaults.buttonColors(Color.Blue),
             modifier = Modifier.size(60.dp),
@@ -91,11 +95,12 @@ fun ItemsScreen(navigator: DestinationsNavigator, viewModel: ItemsViewModel = ko
 fun Item(
     title: String,
     description: String? = null,
-    price: Double? = 0.0
+    price: Double? = 0.0,
+    clickByItem: () -> Unit
 ){
     Card(
         modifier = Modifier
-            .clickable { }
+            .clickable { clickByItem.invoke() }
             .fillMaxWidth()
             .height(100.dp)
             .padding(5.dp),
