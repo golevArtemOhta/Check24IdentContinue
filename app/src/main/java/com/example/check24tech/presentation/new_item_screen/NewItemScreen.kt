@@ -17,6 +17,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,16 +55,19 @@ fun NewItemScreen(
         mutableStateOf(false)
     }
 
-    if (saleItemId != -1){
-        viewModel.getSaleItemById(id = saleItemId)
+    LaunchedEffect(key1 = true){
+        if (saleItemId != -1){
+            viewModel.getSaleItemById(id = saleItemId)
 
-        viewModel.editSaleItem.collectAsStateWithLifecycle().value?.let { uiState ->
-            editItem = true
-            textTitle = uiState.saleItem?.title.toString()
-            textDescription = uiState.saleItem?.description ?: "Without description"
-            textPrice = (uiState.saleItem?.price ?: 0.0).toString()
-        }
-    }else editItem = false
+            viewModel.editSaleItem.collect { uiState ->
+                editItem = true
+                textTitle = uiState.saleItem?.title.toString()
+                textDescription = uiState.saleItem?.description ?: "Without description"
+                textPrice = (uiState.saleItem?.price ?: 0.0).toString()
+            }
+        }else editItem = false
+    }
+
 
     Column(
         modifier = Modifier
@@ -89,7 +93,7 @@ fun NewItemScreen(
                     textDescription = it
                 },
                 label = {
-                    Text("Price")
+                    Text("Description")
                 }
             )
             Spacer(modifier = Modifier.height(20.dp))
@@ -101,7 +105,7 @@ fun NewItemScreen(
                     }
                 },
                 label = {
-                    Text("Description")
+                    Text("Price")
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
@@ -117,6 +121,7 @@ fun NewItemScreen(
                 if (editItem){
                     viewModel.updateSaleItem(
                         SaleItem(
+                            id = saleItemId,
                             title = textTitle,
                             description = textDescription.takeUnless { it.isNullOrEmpty() } ?: "Without description",
                             price = textPrice.toDouble()
