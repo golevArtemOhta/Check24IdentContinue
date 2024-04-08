@@ -1,5 +1,6 @@
 package com.example.checkidenttask.presentation.items_screen
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.rememberImagePainter
 import com.example.checkidenttask.domain.model.SaleItem
 import com.example.checkidenttask.presentation.destinations.NewItemScreenDestination
 import com.example.reviewcodetechtask.R
@@ -57,6 +59,7 @@ fun ItemsScreen(navigator: DestinationsNavigator, viewModel: ItemsViewModel = ko
                         title = saleItem.title,
                         description = saleItem.description ?: "without description",
                         price = saleItem.price ?: 0.0,
+                        image = saleItem.image,
                         clickByItem = {
                             navigator.navigate(NewItemScreenDestination(saleItemId = saleItem.id))
                         }
@@ -96,6 +99,7 @@ fun Item(
     title: String,
     description: String? = null,
     price: Double? = 0.0,
+    image: Uri? = null,
     clickByItem: () -> Unit
 ){
     Card(
@@ -115,7 +119,11 @@ fun Item(
                     modifier = Modifier
                         .width(100.dp)
                         .height(100.dp),
-                    painter = painterResource(id = R.drawable.check24_logo),
+                    painter = if (image != null){
+                        rememberImagePainter(image)
+                    } else{
+                        painterResource(id = R.drawable.ic_photo_camera)
+                    },
                     contentDescription = "photo example"
                 )
 

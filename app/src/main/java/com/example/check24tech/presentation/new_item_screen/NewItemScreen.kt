@@ -1,8 +1,16 @@
 package com.example.checkidenttask.presentation.new_item_screen
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.widget.ImageButton
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -26,19 +34,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import coil.compose.rememberImagePainter
 import com.example.checkidenttask.domain.model.SaleItem
 import com.example.checkidenttask.presentation.destinations.ItemsScreenDestination
-import com.example.checkidenttask.presentation.items_screen.ItemsScreen
 import com.example.reviewcodetechtask.R
+import com.ramcosta.composedestinations.BuildConfig
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import org.koin.androidx.compose.koinViewModel
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Objects
 
 @Destination
 @OptIn(ExperimentalMaterial3Api::class)
@@ -53,6 +66,33 @@ fun NewItemScreen(
     var textPrice by remember { mutableStateOf("") }
     var editItem by remember {
         mutableStateOf(false)
+    }
+
+    val context = LocalContext.current
+    val file = context.createImageFile()
+    val uri = FileProvider.getUriForFile(
+        Objects.requireNonNull(context),
+        context.packageName + ".provider", file
+    )
+
+    var capturedImageUri by remember {
+        mutableStateOf<Uri>(Uri.EMPTY)
+    }
+
+    val cameraLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {
+            capturedImageUri = uri
+        }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) {
+        if (it) {
+            Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show()
+            cameraLauncher.launch(uri)
+        } else {
+            Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
+        }
     }
 
     LaunchedEffect(key1 = true){
@@ -112,9 +152,23 @@ fun NewItemScreen(
         }
 
         Image(
-            modifier = Modifier.size(100.dp),
-            painter = painterResource(id = R.drawable.ic_photo_camera),
-            contentDescription = "photo"
+            modifier = Modifier.size(100.dp)
+                .clickable {
+                    val permissionCheckResult =
+                    ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+                    if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
+                        cameraLauncher.launch(uri)
+                    } else {
+                        // Request a permission
+                        permissionLauncher.launch(Manifest.permission.CAMERA)
+                    }
+                           },
+            painter = if (capturedImageUri.path?.isNotEmpty() == true){
+                rememberImagePainter(capturedImageUri)
+            } else{
+                painterResource(id = R.drawable.ic_photo_camera)
+                  },
+            contentDescription = "photo",
         )
         Button(
             onClick = {
@@ -124,7 +178,8 @@ fun NewItemScreen(
                             id = saleItemId,
                             title = textTitle,
                             description = textDescription.takeUnless { it.isNullOrEmpty() } ?: "Without description",
-                            price = textPrice.toDouble()
+                            price = textPrice.toDouble(),
+                            image = capturedImageUri
                         )
                     )
                 }else{
@@ -132,7 +187,8 @@ fun NewItemScreen(
                         SaleItem(
                             title = textTitle,
                             description = textDescription.takeUnless { it.isNullOrEmpty() } ?: "Without description",
-                            price = textPrice.toDouble()
+                            price = textPrice.toDouble(),
+                            image = capturedImageUri
                         )
                     )
                 }
@@ -160,6 +216,18 @@ fun TextField(label: String, textValue: String = "text") {
             Text("Label")
         }
     )
+}
+
+fun Context.createImageFile(): File {
+    // Create an image file name
+    val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+    val imageFileName = "JPEG_" + timeStamp + "_"
+    val image = File.createTempFile(
+        imageFileName, /* prefix */
+        ".jpg", /* suffix */
+        externalCacheDir      /* directory */
+    )
+    return image
 }
 
 //@Preview
