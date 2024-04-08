@@ -178,7 +178,7 @@ fun NewItemScreen(
                             id = saleItemId,
                             title = textTitle,
                             description = textDescription.takeUnless { it.isNullOrEmpty() } ?: "Without description",
-                            price = textPrice.toDouble(),
+                            price = if (textPrice.isNotBlank()) textPrice.toDouble() else 0.0,
                             image = capturedImageUri
                         )
                     )
@@ -187,7 +187,7 @@ fun NewItemScreen(
                         SaleItem(
                             title = textTitle,
                             description = textDescription.takeUnless { it.isNullOrEmpty() } ?: "Without description",
-                            price = textPrice.toDouble(),
+                            price = if (textPrice.isNotBlank()) textPrice.toDouble() else 0.0,
                             image = capturedImageUri
                         )
                     )

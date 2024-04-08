@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -53,7 +54,7 @@ fun ItemsScreen(navigator: DestinationsNavigator, viewModel: ItemsViewModel = ko
         horizontalAlignment = Alignment.CenterHorizontally) {
 
         viewModel.saleItemsList.collectAsStateWithLifecycle().value?.let { uiState ->
-            LazyColumn {
+            LazyColumn(modifier = Modifier.weight(1f)) {
                 items(uiState.saleItemsList) { saleItem ->
                     Item(
                         title = saleItem.title,
@@ -69,19 +70,13 @@ fun ItemsScreen(navigator: DestinationsNavigator, viewModel: ItemsViewModel = ko
             }
         }
 
-
-        Spacer(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight()
-        )
-
-
         Button(onClick = {
             navigator.navigate(NewItemScreenDestination())
                          },
             colors = ButtonDefaults.buttonColors(Color.Blue),
-            modifier = Modifier.size(60.dp),
+            modifier = Modifier
+                .padding(16.dp)
+                .size(60.dp),
             shape = CircleShape,
             contentPadding = PaddingValues(0.dp)) {
             Image(painter = painterResource(id = R.drawable.baseline_add_24),
@@ -164,8 +159,32 @@ fun Item(
 }
 
 
-//@Preview
-//@Composable
-//fun SimpleComposablePreview() {
-//    //ItemsScreen()
-//}
+@Composable
+fun pr() {
+
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        LazyColumn(
+            modifier = Modifier.weight(1f)
+        ) {
+            items(100) { index ->
+                Text(text = "Item $index")
+            }
+        }
+        Button(
+            onClick = { /* ваше действие */ },
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth()
+        ) {
+            Text(text = "Button")
+        }
+    }
+}
+
+@Preview
+@Composable
+fun SimpleComposablePreview() {
+    pr()
+}
