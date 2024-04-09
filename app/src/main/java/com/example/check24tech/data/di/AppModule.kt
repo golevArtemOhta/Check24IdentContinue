@@ -1,7 +1,7 @@
-package com.example.checkidenttask.data.di
+package com.example.check24tech.data.di
 
-import com.example.checkidenttask.presentation.items_screen.ItemsViewModel
-import com.example.checkidenttask.presentation.new_item_screen.NewItemViewModel
+import com.example.check24tech.presentation.items_screen.ItemsViewModel
+import com.example.check24tech.presentation.new_item_screen.NewItemViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 

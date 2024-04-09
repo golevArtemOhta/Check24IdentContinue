@@ -1,10 +1,9 @@
-package com.example.checkidenttask.presentation.new_item_screen
+package com.example.check24tech.presentation.new_item_screen
 
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,7 +16,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -33,7 +31,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -41,10 +38,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import coil.compose.rememberImagePainter
-import com.example.checkidenttask.domain.model.SaleItem
-import com.example.checkidenttask.presentation.destinations.ItemsScreenDestination
+import com.example.check24tech.domain.model.SaleItem
+import com.example.check24tech.presentation.destinations.ItemsScreenDestination
 import com.example.reviewcodetechtask.R
-import com.ramcosta.composedestinations.BuildConfig
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import org.koin.androidx.compose.koinViewModel
@@ -95,8 +91,8 @@ fun NewItemScreen(
         }
     }
 
-    LaunchedEffect(key1 = true){
-        if (saleItemId != -1){
+    LaunchedEffect(key1 = true) {
+        if (saleItemId != -1) {
             viewModel.getSaleItemById(id = saleItemId)
 
             viewModel.editSaleItem.collect { uiState ->
@@ -105,7 +101,7 @@ fun NewItemScreen(
                 textDescription = uiState.saleItem?.description ?: "Without description"
                 textPrice = (uiState.saleItem?.price ?: 0.0).toString()
             }
-        }else editItem = false
+        } else editItem = false
     }
 
 
@@ -152,41 +148,44 @@ fun NewItemScreen(
         }
 
         Image(
-            modifier = Modifier.size(100.dp)
+            modifier = Modifier
+                .size(100.dp)
                 .clickable {
                     val permissionCheckResult =
-                    ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+                        ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
                     if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
                         cameraLauncher.launch(uri)
                     } else {
                         // Request a permission
                         permissionLauncher.launch(Manifest.permission.CAMERA)
                     }
-                           },
-            painter = if (capturedImageUri.path?.isNotEmpty() == true){
+                },
+            painter = if (capturedImageUri.path?.isNotEmpty() == true) {
                 rememberImagePainter(capturedImageUri)
-            } else{
+            } else {
                 painterResource(id = R.drawable.ic_photo_camera)
-                  },
+            },
             contentDescription = "photo",
         )
         Button(
             onClick = {
-                if (editItem){
+                if (editItem) {
                     viewModel.updateSaleItem(
                         SaleItem(
                             id = saleItemId,
                             title = textTitle,
-                            description = textDescription.takeUnless { it.isNullOrEmpty() } ?: "Without description",
+                            description = textDescription.takeUnless { it.isNullOrEmpty() }
+                                ?: "Without description",
                             price = if (textPrice.isNotBlank()) textPrice.toDouble() else 0.0,
                             image = capturedImageUri
                         )
                     )
-                }else{
+                } else {
                     viewModel.insertSaleItem(
                         SaleItem(
                             title = textTitle,
-                            description = textDescription.takeUnless { it.isNullOrEmpty() } ?: "Without description",
+                            description = textDescription.takeUnless { it.isNullOrEmpty() }
+                                ?: "Without description",
                             price = if (textPrice.isNotBlank()) textPrice.toDouble() else 0.0,
                             image = capturedImageUri
                         )
@@ -219,7 +218,6 @@ fun TextField(label: String, textValue: String = "text") {
 }
 
 fun Context.createImageFile(): File {
-    // Create an image file name
     val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
     val imageFileName = "JPEG_" + timeStamp + "_"
     val image = File.createTempFile(
@@ -229,9 +227,3 @@ fun Context.createImageFile(): File {
     )
     return image
 }
-
-//@Preview
-//@Composable
-//fun SimpleComposablePreview() {
-//   // NewItemScreen()
-//}

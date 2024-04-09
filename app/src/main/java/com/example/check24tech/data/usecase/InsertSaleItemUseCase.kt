@@ -1,7 +1,7 @@
-package com.example.checkidenttask.data.usecase
+package com.example.check24tech.data.usecase
 
-import com.example.checkidenttask.domain.Repository
-import com.example.checkidenttask.domain.model.SaleItem
+import com.example.check24tech.domain.Repository
+import com.example.check24tech.domain.model.SaleItem
 
 class InsertSaleItemUseCase(private val repository: Repository) {
     suspend fun insertSaleItem(saleItem: SaleItem){

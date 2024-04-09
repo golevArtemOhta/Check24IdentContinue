@@ -1,4 +1,4 @@
-package com.example.checkidenttask.presentation.items_screen
+package com.example.check24tech.presentation.items_screen
 
 import android.net.Uri
 import androidx.compose.foundation.Image
@@ -37,8 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberImagePainter
-import com.example.checkidenttask.domain.model.SaleItem
-import com.example.checkidenttask.presentation.destinations.NewItemScreenDestination
+import com.example.check24tech.presentation.destinations.NewItemScreenDestination
 import com.example.reviewcodetechtask.R
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -156,35 +155,4 @@ fun Item(
             }
         }
     }
-}
-
-
-@Composable
-fun pr() {
-
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        LazyColumn(
-            modifier = Modifier.weight(1f)
-        ) {
-            items(100) { index ->
-                Text(text = "Item $index")
-            }
-        }
-        Button(
-            onClick = { /* ваше действие */ },
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-        ) {
-            Text(text = "Button")
-        }
-    }
-}
-
-@Preview
-@Composable
-fun SimpleComposablePreview() {
-    pr()
 }

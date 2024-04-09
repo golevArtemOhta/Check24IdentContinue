@@ -1,4 +1,4 @@
-package com.example.checkidenttask.presentation.start_screen
+package com.example.check24tech.presentation.start_screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,7 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.checkidenttask.presentation.destinations.ItemsScreenDestination
+import com.example.check24tech.presentation.destinations.ItemsScreenDestination
 import com.example.reviewcodetechtask.R
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -38,11 +38,3 @@ fun StartScreen(navigator: DestinationsNavigator){
         }
     }
 }
-
-
-
-//@Preview
-//@Composable
-//fun SimpleComposablePreview() {
-//    //StartScreen()
-//}

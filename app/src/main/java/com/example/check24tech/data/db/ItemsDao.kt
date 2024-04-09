@@ -1,12 +1,10 @@
-package com.example.checkidenttask.data.db
+package com.example.check24tech.data.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.example.checkidenttask.domain.model.SaleItem
+import com.example.check24tech.domain.model.SaleItem
 
 @Dao
 interface ItemsDao {

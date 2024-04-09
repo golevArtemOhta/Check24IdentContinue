@@ -1,10 +1,10 @@
-package com.example.checkidenttask.data.repository
+package com.example.check24tech.data.repository
 
-import com.example.checkidenttask.data.db.ItemsDao
-import com.example.checkidenttask.domain.Repository
-import com.example.checkidenttask.domain.model.SaleItem
+import com.example.check24tech.data.db.ItemsDao
+import com.example.check24tech.domain.Repository
+import com.example.check24tech.domain.model.SaleItem
 
-class RepositoryImpl(private val itemsDao: ItemsDao): Repository {
+class RepositoryImpl(private val itemsDao: ItemsDao) : Repository {
     override fun getAllSaleItems(): List<SaleItem> {
         return itemsDao.getAllItems()
     }

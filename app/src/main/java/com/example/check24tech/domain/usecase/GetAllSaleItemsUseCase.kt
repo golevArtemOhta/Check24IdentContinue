@@ -1,6 +1,6 @@
 package com.example.check24tech.domain.usecase
 
-import com.example.checkidenttask.domain.model.SaleItem
+import com.example.check24tech.domain.model.SaleItem
 
 interface GetAllSaleItemsUseCase {
 

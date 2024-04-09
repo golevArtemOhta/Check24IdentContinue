@@ -1,4 +1,4 @@
-package com.example.checkidenttask.domain.model
+package com.example.check24tech.domain.model
 
 import android.net.Uri
 import androidx.room.Entity

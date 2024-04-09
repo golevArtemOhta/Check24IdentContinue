@@ -1,11 +1,11 @@
-package com.example.checkidenttask.presentation.new_item_screen
+package com.example.check24tech.presentation.new_item_screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.check24tech.domain.usecase.GetSaleItemByIdUseCase
-import com.example.checkidenttask.domain.model.SaleItem
-import com.example.checkidenttask.data.usecase.InsertSaleItemUseCase
-import com.example.checkidenttask.data.usecase.UpdateSaleItemUseCase
+import com.example.check24tech.domain.model.SaleItem
+import com.example.check24tech.data.usecase.InsertSaleItemUseCase
+import com.example.check24tech.data.usecase.UpdateSaleItemUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
