@@ -32,11 +32,9 @@ class NewItemViewModel(
     }
 
     fun updateSaleItem(saleItem: SaleItem?) {
+        if (saleItem == null) return
         viewModelScope.launch(Dispatchers.IO) {
-
-            if (saleItem != null) {
-                updateSaleItemUseCase.updateSaleItem(saleItem)
-            }
+            updateSaleItemUseCase.updateSaleItem(saleItem)
         }
     }
 
