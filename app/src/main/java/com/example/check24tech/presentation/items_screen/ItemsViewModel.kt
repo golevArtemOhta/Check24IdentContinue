@@ -12,10 +12,8 @@ import kotlinx.coroutines.launch
 
 class ItemsViewModel(private val getAllSaleItemsUseCase: GetAllSaleItemsUseCase) : ViewModel() {
 
-    data class UIState(val saleItemsList: List<SaleItem> = emptyList())
-
-    private val _saleItemsList = MutableStateFlow<UIState>(UIState())
-    val saleItemsList: StateFlow<UIState>
+    private val _saleItemsList = MutableStateFlow<List<SaleItem?>>(emptyList())
+    val saleItemsList: StateFlow<List<SaleItem?>>
         get() = _saleItemsList
 
     init {
@@ -25,7 +23,7 @@ class ItemsViewModel(private val getAllSaleItemsUseCase: GetAllSaleItemsUseCase)
     private fun getSaleItemsList() {
         viewModelScope.launch(Dispatchers.IO) {
             getAllSaleItemsUseCase.getAllSaleItems()?.let { list ->
-                _saleItemsList.update { it.copy(list) }
+                _saleItemsList.update { list }
             }
         }
     }

@@ -18,10 +18,8 @@ class NewItemViewModel(
     private val getSaleItemByIdUseCase: GetSaleItemByIdUseCase,
 ) : ViewModel() {
 
-    data class UIStateItem(val saleItem: SaleItem? = null)
-
-    private val _editSaleItem = MutableStateFlow<UIStateItem>(UIStateItem())
-    val editSaleItem: StateFlow<UIStateItem>
+    private val _editSaleItem = MutableStateFlow<SaleItem?>(null)
+    val editSaleItem: StateFlow<SaleItem?>
         get() = _editSaleItem
 
     fun insertSaleItem(saleItem: SaleItem?) {
@@ -45,7 +43,7 @@ class NewItemViewModel(
     fun initId(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             getSaleItemByIdUseCase.getSaleItemById(id).let { saleItem ->
-                _editSaleItem.update { it.copy(saleItem) }
+                _editSaleItem.update { saleItem }
             }
         }
     }
