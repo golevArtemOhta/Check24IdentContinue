@@ -16,7 +16,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -60,9 +62,9 @@ fun NewItemScreen(
     var textTitle by remember { mutableStateOf("") }
     var textDescription by remember { mutableStateOf("") }
     var textPrice by remember { mutableStateOf("") }
-    var editItem by remember {
-        mutableStateOf(false)
-    }
+    var editItem by remember { mutableStateOf(false) }
+
+    val state = rememberScrollState()
 
     val context = LocalContext.current
     val file = context.createImageFile()
@@ -93,7 +95,7 @@ fun NewItemScreen(
 
     LaunchedEffect(key1 = true) {
         if (saleItemId != -1) {
-            viewModel.getSaleItemById(id = saleItemId)
+            viewModel.initId(id = saleItemId)
 
             viewModel.editSaleItem.collect { uiState ->
                 editItem = true
@@ -108,7 +110,8 @@ fun NewItemScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(Color.White)
+            .verticalScroll(state),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {

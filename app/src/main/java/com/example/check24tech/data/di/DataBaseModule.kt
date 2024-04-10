@@ -8,7 +8,6 @@ import org.koin.dsl.module
 
 val databaseModule = module {
 
-
     single {
         Room.databaseBuilder(
             get(),
@@ -18,7 +17,6 @@ val databaseModule = module {
     }
 
     single { get<AppDatabase>().itemsDao() }
-
     single<Repository> { RepositoryImpl(get()) }
 }
 

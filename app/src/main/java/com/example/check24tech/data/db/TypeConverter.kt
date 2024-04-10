@@ -1,4 +1,4 @@
-package com.example.check24tech.domain.model
+package com.example.check24tech.data.db
 
 import android.net.Uri
 import androidx.room.TypeConverter

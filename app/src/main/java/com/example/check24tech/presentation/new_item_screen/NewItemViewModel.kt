@@ -16,7 +16,7 @@ class NewItemViewModel(
     private val insertSaleItemUseCase: InsertSaleItemUseCase,
     private val updateSaleItemUseCase: UpdateSaleItemUseCase,
     private val getSaleItemByIdUseCase: GetSaleItemByIdUseCase,
-    ): ViewModel() {
+) : ViewModel() {
 
     data class UIStateItem(val saleItem: SaleItem? = null)
 
@@ -25,11 +25,11 @@ class NewItemViewModel(
         get() = _editSaleItem
 
     fun insertSaleItem(saleItem: SaleItem?) {
+        if (saleItem == null) return
         viewModelScope.launch(Dispatchers.IO) {
 
-            if (saleItem != null) {
-                insertSaleItemUseCase.insertSaleItem(saleItem)
-            }
+            insertSaleItemUseCase.insertSaleItem(saleItem)
+
         }
     }
 
@@ -42,9 +42,9 @@ class NewItemViewModel(
         }
     }
 
-    fun getSaleItemById(id: Int){
+    fun initId(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            getSaleItemByIdUseCase.getSaleItemById(id).let {saleItem ->
+            getSaleItemByIdUseCase.getSaleItemById(id).let { saleItem ->
                 _editSaleItem.update { it.copy(saleItem) }
             }
         }
