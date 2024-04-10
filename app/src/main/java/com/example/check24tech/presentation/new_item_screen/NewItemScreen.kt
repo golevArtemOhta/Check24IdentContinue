@@ -7,6 +7,7 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -35,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -61,21 +63,19 @@ fun NewItemScreen(
 ) {
     var textTitle by remember { mutableStateOf("") }
     var textDescription by remember { mutableStateOf("") }
-    var textPrice by remember { mutableStateOf("") }
+    var textPrice by remember { mutableStateOf("0.0") }
     var editItem by remember { mutableStateOf(false) }
+    var capturedImageUri by remember { mutableStateOf<Uri>(Uri.EMPTY) }
 
     val state = rememberScrollState()
 
     val context = LocalContext.current
+
     val file = context.createImageFile()
     val uri = FileProvider.getUriForFile(
         Objects.requireNonNull(context),
         context.packageName + ".provider", file
     )
-
-    var capturedImageUri by remember {
-        mutableStateOf<Uri>(Uri.EMPTY)
-    }
 
     val cameraLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {
@@ -86,12 +86,13 @@ fun NewItemScreen(
         ActivityResultContracts.RequestPermission()
     ) {
         if (it) {
-            Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, R.string.permission_granted, Toast.LENGTH_SHORT).show()
             cameraLauncher.launch(uri)
         } else {
-            Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, R.string.permission_denied, Toast.LENGTH_SHORT).show()
         }
     }
+
 
     LaunchedEffect(key1 = true) {
         if (saleItemId != -1) {
@@ -100,8 +101,9 @@ fun NewItemScreen(
             viewModel.editSaleItem.collect { uiState ->
                 editItem = true
                 textTitle = uiState.saleItem?.title.toString()
-                textDescription = uiState.saleItem?.description ?: "Without description"
+                textDescription = uiState.saleItem?.description ?: context.resources.getString(R.string.without_description)
                 textPrice = (uiState.saleItem?.price ?: 0.0).toString()
+                capturedImageUri = uiState.saleItem?.image ?: context.getResourceUri(R.drawable.ic_photo_camera)
             }
         } else editItem = false
     }
@@ -122,7 +124,7 @@ fun NewItemScreen(
                     textTitle = it
                 },
                 label = {
-                    Text("Title")
+                    Text(text = stringResource(id = R.string.title))
                 }
             )
             Spacer(modifier = Modifier.height(20.dp))
@@ -132,7 +134,7 @@ fun NewItemScreen(
                     textDescription = it
                 },
                 label = {
-                    Text("Description")
+                    Text(text = stringResource(id = R.string.description))
                 }
             )
             Spacer(modifier = Modifier.height(20.dp))
@@ -144,7 +146,7 @@ fun NewItemScreen(
                     }
                 },
                 label = {
-                    Text("Price")
+                    Text(text = stringResource(id = R.string.price))
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
@@ -168,7 +170,7 @@ fun NewItemScreen(
             } else {
                 painterResource(id = R.drawable.ic_photo_camera)
             },
-            contentDescription = "photo",
+            contentDescription = stringResource(id = R.string.photo),
         )
         Button(
             onClick = {
@@ -178,7 +180,7 @@ fun NewItemScreen(
                             id = saleItemId,
                             title = textTitle,
                             description = textDescription.takeUnless { it.isNullOrEmpty() }
-                                ?: "Without description",
+                                ?: context.resources.getString(R.string.without_description),
                             price = if (textPrice.isNotBlank()) textPrice.toDouble() else 0.0,
                             image = capturedImageUri
                         )
@@ -188,9 +190,13 @@ fun NewItemScreen(
                         SaleItem(
                             title = textTitle,
                             description = textDescription.takeUnless { it.isNullOrEmpty() }
-                                ?: "Without description",
+                                ?: context.resources.getString(R.string.without_description),
                             price = if (textPrice.isNotBlank()) textPrice.toDouble() else 0.0,
-                            image = capturedImageUri
+                            image = if (capturedImageUri.path?.isNotEmpty() == true){
+                                capturedImageUri
+                            } else{
+                                context.getResourceUri(R.drawable.ic_photo_camera)
+                            }
                         )
                     )
                 }
@@ -198,26 +204,20 @@ fun NewItemScreen(
             },
             colors = ButtonDefaults.buttonColors(Color.Blue)
         ) {
-            Text(text = "SAVE")
+            Text(text = stringResource(id = R.string.save))
         }
     }
 
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TextField(label: String, textValue: String = "text") {
-    var textTitle by remember { mutableStateOf("text") }
-    OutlinedTextField(
-        value = textValue,
-        onValueChange = {
-            var tetextValue = it
-        },
-        label = {
-            Text("Label")
-        }
+fun createFileForPhoto(context: Context): Uri{
+    val file = context.createImageFile()
+    val uri = FileProvider.getUriForFile(
+        Objects.requireNonNull(context),
+        context.packageName + ".provider", file
     )
+    return uri
 }
 
 fun Context.createImageFile(): File {
@@ -229,4 +229,8 @@ fun Context.createImageFile(): File {
         externalCacheDir      /* directory */
     )
     return image
+}
+
+fun Context.getResourceUri(@DrawableRes resId: Int): Uri {
+    return Uri.parse("android.resource://$packageName/$resId")
 }

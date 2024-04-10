@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Check24Tech</string>
+    <string name="without_description">Without description</string>
+    <string name="add_item">add item</string>
+    <string name="photo_example">photo example</string>
+    <string name="permission_granted">Permission Granted</string>
+    <string name="permission_denied">Permission Denied</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="price">Price (€)</string>
+    <string name="photo">photo</string>
+    <string name="save">SAVE</string>
+    <string name="logo_check24">logo_check24</string>
+    <string name="start">START</string>
 </resources>

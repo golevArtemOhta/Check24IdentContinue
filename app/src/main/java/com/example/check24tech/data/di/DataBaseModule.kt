@@ -4,6 +4,7 @@ import androidx.room.Room
 import com.example.check24tech.data.db.AppDatabase
 import com.example.check24tech.data.repository.RepositoryImpl
 import com.example.check24tech.domain.Repository
+import com.example.check24tech.utils.Constants
 import org.koin.dsl.module
 
 val databaseModule = module {
@@ -12,7 +13,7 @@ val databaseModule = module {
         Room.databaseBuilder(
             get(),
             AppDatabase::class.java,
-            "app_database"
+            Constants.DATABASE_NAME
         ).build()
     }
 

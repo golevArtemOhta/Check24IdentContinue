@@ -31,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -57,7 +58,7 @@ fun ItemsScreen(navigator: DestinationsNavigator, viewModel: ItemsViewModel = ko
                 items(uiState.saleItemsList) { saleItem ->
                     Item(
                         title = saleItem.title,
-                        description = saleItem.description ?: "without description",
+                        description = saleItem.description ?: stringResource(id = R.string.without_description),
                         price = saleItem.price ?: 0.0,
                         image = saleItem.image,
                         clickByItem = {
@@ -79,7 +80,7 @@ fun ItemsScreen(navigator: DestinationsNavigator, viewModel: ItemsViewModel = ko
             shape = CircleShape,
             contentPadding = PaddingValues(0.dp)) {
             Image(painter = painterResource(id = R.drawable.baseline_add_24),
-                contentDescription = "add item")
+                contentDescription = stringResource(id = R.string.add_item))
         }
         Spacer(
             Modifier
@@ -118,7 +119,7 @@ fun Item(
                     } else{
                         painterResource(id = R.drawable.ic_photo_camera)
                     },
-                    contentDescription = "photo example"
+                    contentDescription = stringResource(id = R.string.photo_example)
                 )
 
                 Spacer(modifier = Modifier.width(20.dp))
@@ -151,7 +152,7 @@ fun Item(
                 .fillMaxHeight(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center) {
-                Text(text = "$price £", color = Color.White)
+                Text(text = "$price €", color = Color.White)
             }
         }
     }
