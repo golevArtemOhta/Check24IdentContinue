@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -27,6 +28,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewModelScope
 import coil.compose.rememberImagePainter
 import com.example.check24tech.presentation.destinations.NewItemScreenDestination
 import com.example.reviewcodetechtask.R
@@ -48,16 +51,15 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun ItemsScreen(navigator: DestinationsNavigator, viewModel: ItemsViewModel = koinViewModel()){
 
-    Column(modifier = Modifier
+    Box(modifier = Modifier
         .fillMaxSize()
-        .background(color = Color.White),
-        horizontalAlignment = Alignment.CenterHorizontally) {
+        .background(color = Color.White)) {
 
-        viewModel.saleItemsList.collectAsStateWithLifecycle().value?.let { uiState ->
-            LazyColumn(modifier = Modifier.weight(1f)) {
-                items(uiState.saleItemsList) { saleItem ->
+        viewModel.saleItemsList.collectAsState(initial = emptyList()).value.let{ saleItemsList ->
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                items(saleItemsList) { saleItem ->
                     Item(
-                        title = saleItem.title,
+                        title = saleItem.title ,
                         description = saleItem.description ?: stringResource(id = R.string.without_description),
                         price = saleItem.price ?: 0.0,
                         image = saleItem.image,
@@ -68,6 +70,7 @@ fun ItemsScreen(navigator: DestinationsNavigator, viewModel: ItemsViewModel = ko
                 }
 
             }
+
         }
 
         Button(onClick = {
@@ -76,8 +79,12 @@ fun ItemsScreen(navigator: DestinationsNavigator, viewModel: ItemsViewModel = ko
             colors = ButtonDefaults.buttonColors(Color.Blue),
             modifier = Modifier
                 .padding(16.dp)
-                .size(60.dp),
+                .size(60.dp)
+                .align(Alignment.BottomCenter),
             shape = CircleShape,
+            elevation = ButtonDefaults.buttonElevation(
+                defaultElevation = 20.dp
+            ),
             contentPadding = PaddingValues(0.dp)) {
             Image(painter = painterResource(id = R.drawable.baseline_add_24),
                 contentDescription = stringResource(id = R.string.add_item))

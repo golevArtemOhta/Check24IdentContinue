@@ -27,6 +27,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,6 +48,7 @@ import com.example.check24tech.presentation.destinations.ItemsScreenDestination
 import com.example.reviewcodetechtask.R
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.flow.collect
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 import java.text.SimpleDateFormat
@@ -80,6 +82,9 @@ fun NewItemScreen(
     val cameraLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {
             capturedImageUri = uri
+            val title = viewModel.title.value
+            val description = viewModel.description.value
+            val price = viewModel.price.value
         }
 
     val permissionLauncher = rememberLauncherForActivityResult(
@@ -94,16 +99,16 @@ fun NewItemScreen(
     }
 
 
+
+
     LaunchedEffect(key1 = true) {
         if (saleItemId != -1) {
-            viewModel.initId(id = saleItemId)
-
-            viewModel.editSaleItem.collect { uiState ->
+            viewModel.initId(id = saleItemId).collect{saleItem ->
                 editItem = true
-                textTitle = uiState.saleItem?.title.toString()
-                textDescription = uiState.saleItem?.description ?: context.resources.getString(R.string.without_description)
-                textPrice = (uiState.saleItem?.price ?: 0.0).toString()
-                capturedImageUri = uiState.saleItem?.image ?: context.getResourceUri(R.drawable.ic_photo_camera)
+                textTitle = saleItem?.title.toString()
+                textDescription = saleItem?.description ?: context.resources.getString(R.string.without_description)
+                textPrice = (saleItem?.price ?: 0.0).toString()
+                capturedImageUri = saleItem?.image ?: context.getResourceUri(R.drawable.ic_photo_camera)
             }
         } else editItem = false
     }
@@ -160,6 +165,7 @@ fun NewItemScreen(
                         ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
                     if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
                         cameraLauncher.launch(uri)
+                        viewModel.putEnteredData()
                     } else {
                         // Request a permission
                         permissionLauncher.launch(Manifest.permission.CAMERA)
