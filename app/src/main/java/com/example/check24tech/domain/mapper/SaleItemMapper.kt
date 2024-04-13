@@ -1,14 +1,11 @@
 package com.example.check24tech.domain.mapper
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
-import coil.map.Mapper
 import com.example.check24tech.data.model.SaleItemDto
 import com.example.check24tech.domain.model.SaleItemModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class SaleItemMapper: com.example.check24tech.common.Mapper<SaleItemDto, SaleItemModel>{
+class SaleItemMapper : com.example.check24tech.common.Mapper<SaleItemDto, SaleItemModel> {
     override fun mapFromDataToDomain(from: SaleItemDto): SaleItemModel {
         return SaleItemModel(
             id = from.id,

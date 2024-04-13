@@ -2,8 +2,6 @@ package com.example.check24tech.data.db
 
 import android.net.Uri
 import androidx.room.TypeConverter
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 
 class UriConverter {
     @TypeConverter

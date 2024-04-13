@@ -35,11 +35,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewModelScope
 import coil.compose.rememberImagePainter
 import com.example.check24tech.presentation.destinations.NewItemScreenDestination
 import com.example.reviewcodetechtask.R
@@ -49,18 +46,21 @@ import org.koin.androidx.compose.koinViewModel
 
 @Destination
 @Composable
-fun ItemsScreen(navigator: DestinationsNavigator, viewModel: ItemsViewModel = koinViewModel()){
+fun ItemsScreen(navigator: DestinationsNavigator, viewModel: ItemsViewModel = koinViewModel()) {
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(color = Color.White)) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.White)
+    ) {
 
-        viewModel.saleItemsList.collectAsState(initial = emptyList()).value.let{ saleItemsList ->
+        viewModel.saleItemsList.collectAsState(initial = emptyList()).value.let { saleItemsList ->
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(saleItemsList) { saleItem ->
                     Item(
-                        title = saleItem.title ,
-                        description = saleItem.description ?: stringResource(id = R.string.without_description),
+                        title = saleItem.title,
+                        description = saleItem.description
+                            ?: stringResource(id = R.string.without_description),
                         price = saleItem.price ?: 0.0,
                         image = saleItem.image,
                         clickByItem = {
@@ -73,9 +73,10 @@ fun ItemsScreen(navigator: DestinationsNavigator, viewModel: ItemsViewModel = ko
 
         }
 
-        Button(onClick = {
-            navigator.navigate(NewItemScreenDestination())
-                         },
+        Button(
+            onClick = {
+                navigator.navigate(NewItemScreenDestination())
+            },
             colors = ButtonDefaults.buttonColors(Color.Blue),
             modifier = Modifier
                 .padding(16.dp)
@@ -85,9 +86,12 @@ fun ItemsScreen(navigator: DestinationsNavigator, viewModel: ItemsViewModel = ko
             elevation = ButtonDefaults.buttonElevation(
                 defaultElevation = 20.dp
             ),
-            contentPadding = PaddingValues(0.dp)) {
-            Image(painter = painterResource(id = R.drawable.baseline_add_24),
-                contentDescription = stringResource(id = R.string.add_item))
+            contentPadding = PaddingValues(0.dp)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.baseline_add_24),
+                contentDescription = stringResource(id = R.string.add_item)
+            )
         }
         Spacer(
             Modifier
@@ -103,7 +107,7 @@ fun Item(
     price: Double? = 0.0,
     image: Uri? = null,
     clickByItem: () -> Unit
-){
+) {
     Card(
         modifier = Modifier
             .clickable { clickByItem.invoke() }
@@ -114,53 +118,59 @@ fun Item(
         elevation = CardDefaults.cardElevation(
             defaultElevation = 5.dp,
         )
-    ){
-        Row (modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically) {
-                Image(
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                modifier = Modifier
+                    .width(100.dp)
+                    .height(100.dp),
+                painter = if (image != null) {
+                    rememberImagePainter(image)
+                } else {
+                    painterResource(id = R.drawable.ic_photo_camera)
+                },
+                contentDescription = stringResource(id = R.string.photo_example)
+            )
+
+            Spacer(modifier = Modifier.width(20.dp))
+
+            Column(verticalArrangement = Arrangement.SpaceEvenly) {
+                Text(
                     modifier = Modifier
-                        .width(100.dp)
-                        .height(100.dp),
-                    painter = if (image != null){
-                        rememberImagePainter(image)
-                    } else{
-                        painterResource(id = R.drawable.ic_photo_camera)
-                    },
-                    contentDescription = stringResource(id = R.string.photo_example)
+                        .wrapContentHeight(align = Alignment.CenterVertically), text = "$title",
+                    fontSize = 25.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
                 )
 
-                Spacer(modifier = Modifier.width(20.dp))
-
-                Column(verticalArrangement = Arrangement.SpaceEvenly) {
-                    Text(
-                        modifier = Modifier
-                            .wrapContentHeight(align = Alignment.CenterVertically), text = "$title",
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
-                    )
-
-                    val truncatedDescription = description?.take(12)?.plus(if (description.length > 12) "..." else "")
-                    Text(
-                        modifier = Modifier
-                            .wrapContentHeight(align = Alignment.CenterVertically),
-                        text = truncatedDescription ?: "",
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
-                    )
-                }
+                val truncatedDescription =
+                    description?.take(12)?.plus(if (description.length > 12) "..." else "")
+                Text(
+                    modifier = Modifier
+                        .wrapContentHeight(align = Alignment.CenterVertically),
+                    text = truncatedDescription ?: "",
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
 
             Spacer(
                 Modifier
                     .weight(1f)
-                    .fillMaxHeight())
-            Column(modifier = Modifier
-                .background(Color.Blue)
-                .width(70.dp)
-                .fillMaxHeight(),
+                    .fillMaxHeight()
+            )
+            Column(
+                modifier = Modifier
+                    .background(Color.Blue)
+                    .width(70.dp)
+                    .fillMaxHeight(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center) {
+                verticalArrangement = Arrangement.Center
+            ) {
                 Text(text = "$price €", color = Color.White)
             }
         }

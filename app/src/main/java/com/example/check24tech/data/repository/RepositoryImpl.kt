@@ -7,7 +7,8 @@ import com.example.check24tech.domain.mapper.SaleItemMapper
 import com.example.check24tech.domain.model.SaleItemModel
 import kotlinx.coroutines.flow.Flow
 
-class RepositoryImpl(private val itemsDao: ItemsDao, private val saleItemMapper: SaleItemMapper) : Repository {
+class RepositoryImpl(private val itemsDao: ItemsDao, private val saleItemMapper: SaleItemMapper) :
+    Repository {
     override fun getAllSaleItems(): Flow<List<SaleItemModel>> {
         return saleItemMapper.listOfDataToDomainFlow(itemsDao.getAllItems())
     }

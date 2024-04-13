@@ -4,11 +4,11 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.check24tech.domain.usecase.GetSaleItemByIdUseCase
 import com.example.check24tech.data.model.SaleItemDto
 import com.example.check24tech.data.usecase.InsertSaleItemUseCase
 import com.example.check24tech.data.usecase.UpdateSaleItemUseCase
 import com.example.check24tech.domain.model.SaleItemModel
+import com.example.check24tech.domain.usecase.GetSaleItemByIdUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,9 +37,7 @@ class NewItemViewModel(
     fun insertSaleItem(saleItemModel: SaleItemModel?) {
         if (saleItemModel == null) return
         viewModelScope.launch(Dispatchers.IO) {
-
             insertSaleItemUseCase.insertSaleItem(saleItemModel)
-
         }
     }
 

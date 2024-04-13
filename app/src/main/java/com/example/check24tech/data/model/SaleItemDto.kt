@@ -11,7 +11,7 @@ data class SaleItemDto(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
     var title: String,
-    var description : String? = null,
+    var description: String? = null,
     var price: Double? = null,
     var image: Uri? = null
 )

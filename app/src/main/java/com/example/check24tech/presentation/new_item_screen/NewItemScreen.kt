@@ -4,25 +4,21 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -49,7 +45,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import coil.compose.rememberImagePainter
-import com.example.check24tech.data.model.SaleItemDto
 import com.example.check24tech.domain.model.SaleItemModel
 import com.example.check24tech.presentation.destinations.ItemsScreenDestination
 import com.example.check24tech.utils.PreferensHelper
@@ -111,12 +106,14 @@ fun NewItemScreen(
 
     LaunchedEffect(key1 = true) {
         if (saleItemId != -1) {
-            viewModel.initId(id = saleItemId).collect{saleItem ->
+            viewModel.initId(id = saleItemId).collect { saleItem ->
                 editItem = true
                 textTitle = saleItem?.title.toString()
-                textDescription = saleItem?.description ?: context.resources.getString(R.string.without_description)
+                textDescription = saleItem?.description
+                    ?: context.resources.getString(R.string.without_description)
                 textPrice = (saleItem?.price ?: 0.0).toString()
-                capturedImageUri = saleItem?.image ?: context.getResourceUri(R.drawable.ic_photo_camera)
+                capturedImageUri =
+                    saleItem?.image ?: context.getResourceUri(R.drawable.ic_photo_camera)
             }
         } else editItem = false
     }
@@ -167,14 +164,17 @@ fun NewItemScreen(
             )
         }
 
-        if (capturedImageUri.path?.isNotEmpty() == true){
+        if (capturedImageUri.path?.isNotEmpty() == true) {
             Row {
                 Image(
                     modifier = Modifier
                         .size(100.dp)
                         .clickable {
                             val permissionCheckResult =
-                                ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+                                ContextCompat.checkSelfPermission(
+                                    context,
+                                    Manifest.permission.CAMERA
+                                )
                             if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
                                 cameraLauncher.launch(uri)
                                 viewModel.putEnteredData()
@@ -195,7 +195,10 @@ fun NewItemScreen(
                         .size(100.dp)
                         .clickable {
                             val permissionCheckResult =
-                                ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+                                ContextCompat.checkSelfPermission(
+                                    context,
+                                    Manifest.permission.CAMERA
+                                )
                             if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
                                 cameraLauncher.launch(uri)
                                 viewModel.putEnteredData()
@@ -213,7 +216,7 @@ fun NewItemScreen(
                     colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) })
                 )
             }
-        } else{
+        } else {
             Image(
                 modifier = Modifier
                     .size(100.dp)
@@ -285,7 +288,7 @@ fun NewItemScreen(
 
 }
 
-fun createFileForPhoto(context: Context): Uri{
+fun createFileForPhoto(context: Context): Uri {
     val file = context.createImageFile()
     val uri = FileProvider.getUriForFile(
         Objects.requireNonNull(context),
