@@ -15,12 +15,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.check24tech.presentation.destinations.ItemsScreenDestination
+import com.example.check24tech.utils.PreferensHelper
 import com.example.reviewcodetechtask.R
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -28,6 +30,11 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Destination(start = true)
 @Composable
 fun StartScreen(navigator: DestinationsNavigator){
+    val context = LocalContext.current
+    val isFirstItemAdded = PreferensHelper.isFirstItemAdded(context = context)
+    if (isFirstItemAdded){
+        navigator.navigate(ItemsScreenDestination)
+    }
     Column(modifier = Modifier
         .fillMaxSize()
         .background(Color.White),

@@ -27,7 +27,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,10 +44,10 @@ import androidx.core.content.FileProvider
 import coil.compose.rememberImagePainter
 import com.example.check24tech.domain.model.SaleItem
 import com.example.check24tech.presentation.destinations.ItemsScreenDestination
+import com.example.check24tech.utils.PreferensHelper
 import com.example.reviewcodetechtask.R
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import kotlinx.coroutines.flow.collect
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 import java.text.SimpleDateFormat
@@ -192,6 +191,10 @@ fun NewItemScreen(
                         )
                     )
                 } else {
+                    val isFirstItemAdded = PreferensHelper.isFirstItemAdded(context = context)
+                    if (!isFirstItemAdded){
+                        PreferensHelper.setFirstItemAdded(context = context, true)
+                    }
                     viewModel.insertSaleItem(
                         SaleItem(
                             title = textTitle,
