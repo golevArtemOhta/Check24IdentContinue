@@ -10,16 +10,4 @@ class ItemsViewModel(private val getAllSaleItemsUseCase: GetAllSaleItemsUseCase)
     private val _saleItemsListDto = MutableStateFlow<List<SaleItemDto?>>(emptyList())
     val saleItemsList = getAllSaleItemsUseCase.getAllSaleItems()
 
-//    init {
-//        getSaleItemsList()
-//    }
-
-//    fun getSaleItemsList(): Flow<List<SaleItem>> {
-////        viewModelScope.launch(Dispatchers.IO) {
-////            getAllSaleItemsUseCase.getAllSaleItems()?.let { list ->
-////                _saleItemsList.update { list }
-////            }
-////        }
-//        return getAllSaleItemsUseCase.getAllSaleItems().flowOn(Dispatchers.IO)
-//    }
 }

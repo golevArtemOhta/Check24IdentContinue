@@ -140,9 +140,11 @@ fun Item(
                         color = Color.Black
                     )
 
+                    val truncatedDescription = description?.take(12)?.plus(if (description.length > 12) "..." else "")
                     Text(
                         modifier = Modifier
-                            .wrapContentHeight(align = Alignment.CenterVertically), text = "$description",
+                            .wrapContentHeight(align = Alignment.CenterVertically),
+                        text = truncatedDescription ?: "",
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
