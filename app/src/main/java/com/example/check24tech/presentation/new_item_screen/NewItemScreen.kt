@@ -43,6 +43,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import coil.compose.rememberImagePainter
 import com.example.check24tech.data.model.SaleItemDto
+import com.example.check24tech.domain.model.SaleItemModel
 import com.example.check24tech.presentation.destinations.ItemsScreenDestination
 import com.example.check24tech.utils.PreferensHelper
 import com.example.reviewcodetechtask.R
@@ -181,7 +182,7 @@ fun NewItemScreen(
             onClick = {
                 if (editItem) {
                     viewModel.updateSaleItem(
-                        SaleItemDto(
+                        SaleItemModel(
                             id = saleItemId,
                             title = textTitle,
                             description = textDescription.takeUnless { it.isNullOrEmpty() }
@@ -196,7 +197,8 @@ fun NewItemScreen(
                         PreferensHelper.setFirstItemAdded(context = context, true)
                     }
                     viewModel.insertSaleItem(
-                        SaleItemDto(
+                        SaleItemModel(
+                            id = 0,
                             title = textTitle,
                             description = textDescription.takeUnless { it.isNullOrEmpty() }
                                 ?: context.resources.getString(R.string.without_description),

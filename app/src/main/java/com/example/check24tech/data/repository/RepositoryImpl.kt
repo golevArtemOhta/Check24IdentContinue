@@ -16,11 +16,11 @@ class RepositoryImpl(private val itemsDao: ItemsDao, private val saleItemMapper:
         return saleItemMapper.dataToDomainFlow(itemsDao.getItemById(id))
     }
 
-    override suspend fun insertSaleItem(saleItemDto: SaleItemDto) {
-        itemsDao.insertSaleItem(saleItemDto)
+    override suspend fun insertSaleItem(saleItemModel: SaleItemModel) {
+        itemsDao.insertSaleItem(saleItemMapper.mapFromDomainToData(saleItemModel))
     }
 
-    override suspend fun updateSaleItem(saleItemDto: SaleItemDto) {
-        itemsDao.updateSaleItem(saleItemDto)
+    override suspend fun updateSaleItem(saleItemModel: SaleItemModel) {
+        itemsDao.updateSaleItem(saleItemMapper.mapFromDomainToData(saleItemModel))
     }
 }

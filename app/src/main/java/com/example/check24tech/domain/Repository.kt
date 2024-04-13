@@ -10,7 +10,7 @@ interface Repository {
 
     fun getSaleItemById(id:Int): Flow<SaleItemModel>
 
-    suspend fun insertSaleItem(saleItemDto: SaleItemDto)
+    suspend fun insertSaleItem(saleItemModel: SaleItemModel)
 
-    suspend fun updateSaleItem(saleItemDto: SaleItemDto)
+    suspend fun updateSaleItem(saleItemModel: SaleItemModel)
 }

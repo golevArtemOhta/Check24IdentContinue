@@ -34,19 +34,19 @@ class NewItemViewModel(
     private val _price = mutableStateOf("0.0")
     val price: State<String> = _price
 
-    fun insertSaleItem(saleItemDto: SaleItemDto?) {
-        if (saleItemDto == null) return
+    fun insertSaleItem(saleItemModel: SaleItemModel?) {
+        if (saleItemModel == null) return
         viewModelScope.launch(Dispatchers.IO) {
 
-            insertSaleItemUseCase.insertSaleItem(saleItemDto)
+            insertSaleItemUseCase.insertSaleItem(saleItemModel)
 
         }
     }
 
-    fun updateSaleItem(saleItemDto: SaleItemDto?) {
-        if (saleItemDto == null) return
+    fun updateSaleItem(saleItemModel: SaleItemModel?) {
+        if (saleItemModel == null) return
         viewModelScope.launch(Dispatchers.IO) {
-            updateSaleItemUseCase.updateSaleItem(saleItemDto)
+            updateSaleItemUseCase.updateSaleItem(saleItemModel)
         }
     }
 
