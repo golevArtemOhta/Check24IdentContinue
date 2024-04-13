@@ -1,14 +1,13 @@
-package com.example.check24tech.domain.model
+package com.example.check24tech.data.model
 
 import android.net.Uri
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
 import com.example.check24tech.utils.Constants
 
 
 @Entity(tableName = Constants.TABLE_NAME)
-data class SaleItem(
+data class SaleItemDto(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
     var title: String,

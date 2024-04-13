@@ -2,25 +2,25 @@ package com.example.check24tech.data.repository
 
 import com.example.check24tech.data.db.ItemsDao
 import com.example.check24tech.domain.Repository
-import com.example.check24tech.domain.model.SaleItem
+import com.example.check24tech.data.model.SaleItemDto
+import com.example.check24tech.domain.mapper.SaleItemMapper
+import com.example.check24tech.domain.model.SaleItemModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
-class RepositoryImpl(private val itemsDao: ItemsDao) : Repository {
-    override fun getAllSaleItems(): Flow<List<SaleItem>> {
-        return itemsDao.getAllItems()
+class RepositoryImpl(private val itemsDao: ItemsDao, private val saleItemMapper: SaleItemMapper) : Repository {
+    override fun getAllSaleItems(): Flow<List<SaleItemModel>> {
+        return saleItemMapper.listOfDataToDomainFlow(itemsDao.getAllItems())
     }
 
-    override fun getSaleItemById(id: Int): Flow<SaleItem> {
-        return itemsDao.getItemById(id)
+    override fun getSaleItemById(id: Int): Flow<SaleItemModel> {
+        return saleItemMapper.dataToDomainFlow(itemsDao.getItemById(id))
     }
 
-    override suspend fun insertSaleItem(saleItem: SaleItem) {
-        itemsDao.insertSaleItem(saleItem)
+    override suspend fun insertSaleItem(saleItemDto: SaleItemDto) {
+        itemsDao.insertSaleItem(saleItemDto)
     }
 
-    override suspend fun updateSaleItem(saleItem: SaleItem) {
-        itemsDao.updateSaleItem(saleItem)
+    override suspend fun updateSaleItem(saleItemDto: SaleItemDto) {
+        itemsDao.updateSaleItem(saleItemDto)
     }
 }
