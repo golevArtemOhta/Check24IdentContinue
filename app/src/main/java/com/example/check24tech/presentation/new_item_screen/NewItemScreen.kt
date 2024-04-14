@@ -3,7 +3,11 @@ package com.example.check24tech.presentation.new_item_screen
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -37,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -45,6 +50,11 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import coil.compose.rememberImagePainter
+import com.canhub.cropper.CropImage.CancelledResult.uriContent
+import com.canhub.cropper.CropImageActivity
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageOptions
 import com.example.check24tech.domain.model.SaleItemModel
 import com.example.check24tech.presentation.destinations.ItemsScreenDestination
 import com.example.check24tech.utils.PreferensHelper
@@ -69,39 +79,30 @@ fun NewItemScreen(
     var textDescription by remember { mutableStateOf("") }
     var textPrice by remember { mutableStateOf("0.0") }
     var editItem by remember { mutableStateOf(false) }
-    var capturedImageUri by remember { mutableStateOf<Uri>(Uri.EMPTY) }
+    var capturedImageUri by remember { mutableStateOf<Uri?>(null) }
     val isTitleEmpty = textTitle.isEmpty()
+    var bitmap by remember { mutableStateOf<Bitmap?>(null) }
 
     val state = rememberScrollState()
 
     val context = LocalContext.current
 
-    val file = context.createImageFile()
-    val uri = FileProvider.getUriForFile(
-        Objects.requireNonNull(context),
-        context.packageName + ".provider", file
-    )
-
-    val cameraLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {
-            capturedImageUri = uri
-            val title = viewModel.title.value
-            val description = viewModel.description.value
-            val price = viewModel.price.value
-        }
-
-    val permissionLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) {
-        if (it) {
-            Toast.makeText(context, R.string.permission_granted, Toast.LENGTH_SHORT).show()
-            cameraLauncher.launch(uri)
+    val imageCropLauncher = rememberLauncherForActivityResult(CropImageContract()) { result ->
+        if (result.isSuccessful) {
+            capturedImageUri = result.uriContent
         } else {
-            Toast.makeText(context, R.string.permission_denied, Toast.LENGTH_SHORT).show()
+            val exception = result.error
         }
     }
 
-
+    if (capturedImageUri != null) {
+        if (Build.VERSION.SDK_INT < 28) {
+            bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, capturedImageUri)
+        } else {
+            val source = ImageDecoder.createSource(context.contentResolver, capturedImageUri!!)
+            bitmap = ImageDecoder.decodeBitmap(source)
+        }
+    }
 
 
     LaunchedEffect(key1 = true) {
@@ -164,54 +165,26 @@ fun NewItemScreen(
             )
         }
 
-        if (capturedImageUri.path?.isNotEmpty() == true) {
+        if (bitmap != null) {
             Row {
                 Image(
                     modifier = Modifier
                         .size(100.dp)
                         .clickable {
-                            val permissionCheckResult =
-                                ContextCompat.checkSelfPermission(
-                                    context,
-                                    Manifest.permission.CAMERA
-                                )
-                            if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
-                                cameraLauncher.launch(uri)
-                                viewModel.putEnteredData()
-                            } else {
-                                // Request a permission
-                                permissionLauncher.launch(Manifest.permission.CAMERA)
-                            }
+                            val cropOption = CropImageContractOptions(uriContent, CropImageOptions())
+                            imageCropLauncher.launch(cropOption)
                         },
-                    painter = if (capturedImageUri.path?.isNotEmpty() == true) {
-                        rememberImagePainter(capturedImageUri)
-                    } else {
-                        painterResource(id = R.drawable.ic_photo_camera)
-                    },
+                    bitmap = bitmap?.asImageBitmap()!!,
                     contentDescription = stringResource(id = R.string.photo)
                 )
                 Image(
                     modifier = Modifier
                         .size(100.dp)
                         .clickable {
-                            val permissionCheckResult =
-                                ContextCompat.checkSelfPermission(
-                                    context,
-                                    Manifest.permission.CAMERA
-                                )
-                            if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
-                                cameraLauncher.launch(uri)
-                                viewModel.putEnteredData()
-                            } else {
-                                // Request a permission
-                                permissionLauncher.launch(Manifest.permission.CAMERA)
-                            }
+                            val cropOption = CropImageContractOptions(uriContent, CropImageOptions())
+                            imageCropLauncher.launch(cropOption)
                         },
-                    painter = if (capturedImageUri.path?.isNotEmpty() == true) {
-                        rememberImagePainter(capturedImageUri)
-                    } else {
-                        painterResource(id = R.drawable.ic_photo_camera)
-                    },
+                    bitmap = bitmap?.asImageBitmap()!!,
                     contentDescription = stringResource(id = R.string.photo),
                     colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) })
                 )
@@ -221,21 +194,11 @@ fun NewItemScreen(
                 modifier = Modifier
                     .size(100.dp)
                     .clickable {
-                        val permissionCheckResult =
-                            ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
-                        if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
-                            cameraLauncher.launch(uri)
-                            viewModel.putEnteredData()
-                        } else {
-                            // Request a permission
-                            permissionLauncher.launch(Manifest.permission.CAMERA)
-                        }
+                        val cropOption = CropImageContractOptions(uriContent, CropImageOptions())
+                        imageCropLauncher.launch(cropOption)
                     },
-                painter = if (capturedImageUri.path?.isNotEmpty() == true) {
-                    rememberImagePainter(capturedImageUri)
-                } else {
-                    painterResource(id = R.drawable.ic_photo_camera)
-                },
+                painter =
+                painterResource(id = R.drawable.ic_photo_camera),
                 contentDescription = stringResource(id = R.string.photo)
             )
         }
@@ -267,7 +230,7 @@ fun NewItemScreen(
                                 description = textDescription.takeUnless { it.isNullOrEmpty() }
                                     ?: context.resources.getString(R.string.without_description),
                                 price = if (textPrice.isNotBlank()) textPrice.toDouble() else 0.0,
-                                image = if (capturedImageUri.path?.isNotEmpty() == true) {
+                                image = if (capturedImageUri?.path?.isNotEmpty() == true) {
                                     capturedImageUri
                                 } else {
                                     context.getResourceUri(R.drawable.ic_photo_camera)

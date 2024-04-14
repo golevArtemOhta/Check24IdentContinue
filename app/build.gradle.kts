@@ -111,4 +111,6 @@ dependencies {
 
     implementation("com.google.code.gson:gson:2.10")
 
+    implementation("com.github.CanHub:Android-Image-Cropper:4.0.0")
+
 }
