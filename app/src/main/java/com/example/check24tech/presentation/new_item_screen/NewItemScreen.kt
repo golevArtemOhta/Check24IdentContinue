@@ -107,7 +107,7 @@ fun NewItemScreen(
         }
     }
 
-    if (capturedImageUri != null) {
+    if (capturedImageUri != null && capturedImageUri != context.getResourceUri(R.drawable.ic_photo_camera)) {
         if (Build.VERSION.SDK_INT < 28) {
             bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, capturedImageUri)
         } else {
