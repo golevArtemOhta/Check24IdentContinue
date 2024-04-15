@@ -49,9 +49,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import coil.compose.rememberImagePainter
 import com.canhub.cropper.CropImage.CancelledResult.uriContent
-import com.canhub.cropper.CropImageActivity
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
@@ -91,6 +89,9 @@ fun NewItemScreen(
     val imageCropLauncher = rememberLauncherForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful) {
             capturedImageUri = result.uriContent
+            textTitle = viewModel.title.value
+            textDescription = viewModel.description.value
+            textPrice = viewModel.price.value
         } else {
             val exception = result.error
         }
@@ -220,6 +221,11 @@ fun NewItemScreen(
                         val permissionCheckResult =
                             ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
                         if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
+                            viewModel.putEnteredData(
+                                title = textTitle,
+                                textDescription = textDescription,
+                                textPrice = textPrice
+                            )
                             val cropOption =
                                 CropImageContractOptions(uriContent, CropImageOptions())
                             imageCropLauncher.launch(cropOption)
