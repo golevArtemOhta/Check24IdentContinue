@@ -95,6 +95,18 @@ fun NewItemScreen(
         }
     }
 
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) {
+        if (it) {
+            Toast.makeText(context, R.string.permission_granted, Toast.LENGTH_SHORT).show()
+            val cropOption = CropImageContractOptions(uriContent, CropImageOptions())
+            imageCropLauncher.launch(cropOption)
+        } else {
+            Toast.makeText(context, R.string.permission_denied, Toast.LENGTH_SHORT).show()
+        }
+    }
+
     if (capturedImageUri != null) {
         if (Build.VERSION.SDK_INT < 28) {
             bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, capturedImageUri)
@@ -194,8 +206,16 @@ fun NewItemScreen(
                 modifier = Modifier
                     .size(100.dp)
                     .clickable {
-                        val cropOption = CropImageContractOptions(uriContent, CropImageOptions())
-                        imageCropLauncher.launch(cropOption)
+                        val permissionCheckResult =
+                            ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+                        if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
+                            val cropOption = CropImageContractOptions(uriContent, CropImageOptions())
+                            imageCropLauncher.launch(cropOption)
+                        } else {
+                            // Request a permission
+                            permissionLauncher.launch(Manifest.permission.CAMERA)
+                        }
+
                     },
                 painter =
                 painterResource(id = R.drawable.ic_photo_camera),
