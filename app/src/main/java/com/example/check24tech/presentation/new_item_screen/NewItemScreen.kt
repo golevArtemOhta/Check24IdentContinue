@@ -179,27 +179,31 @@ fun NewItemScreen(
 
         if (bitmap != null) {
             Row {
-                Image(
-                    modifier = Modifier
-                        .size(100.dp)
-                        .clickable {
-                            val cropOption = CropImageContractOptions(uriContent, CropImageOptions())
-                            imageCropLauncher.launch(cropOption)
-                        },
-                    bitmap = bitmap?.asImageBitmap()!!,
-                    contentDescription = stringResource(id = R.string.photo)
-                )
-                Image(
-                    modifier = Modifier
-                        .size(100.dp)
-                        .clickable {
-                            val cropOption = CropImageContractOptions(uriContent, CropImageOptions())
-                            imageCropLauncher.launch(cropOption)
-                        },
-                    bitmap = bitmap?.asImageBitmap()!!,
-                    contentDescription = stringResource(id = R.string.photo),
-                    colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) })
-                )
+                bitmap?.asImageBitmap()?.let {bitmap ->
+                    Image(
+                        modifier = Modifier
+                            .size(100.dp)
+                            .clickable {
+                                val cropOption = CropImageContractOptions(uriContent, CropImageOptions())
+                                imageCropLauncher.launch(cropOption)
+                            },
+                        bitmap = bitmap,
+                        contentDescription = stringResource(id = R.string.photo)
+                    )
+                }
+                bitmap?.asImageBitmap()?.let { bitmap ->
+                    Image(
+                        modifier = Modifier
+                            .size(100.dp)
+                            .clickable {
+                                val cropOption = CropImageContractOptions(uriContent, CropImageOptions())
+                                imageCropLauncher.launch(cropOption)
+                            },
+                        bitmap = bitmap,
+                        contentDescription = stringResource(id = R.string.photo),
+                        colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) })
+                    )
+                }
             }
         } else {
             Image(
