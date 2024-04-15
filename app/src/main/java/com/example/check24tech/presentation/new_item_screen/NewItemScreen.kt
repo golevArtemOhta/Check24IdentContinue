@@ -186,6 +186,11 @@ fun NewItemScreen(
                         modifier = Modifier
                             .size(100.dp)
                             .clickable {
+                                viewModel.putEnteredData(
+                                    title = textTitle,
+                                    textDescription = textDescription,
+                                    textPrice = textPrice
+                                )
                                 val cropOption =
                                     CropImageContractOptions(uriContent, CropImageOptions())
                                 imageCropLauncher.launch(cropOption)
@@ -199,6 +204,11 @@ fun NewItemScreen(
                         modifier = Modifier
                             .size(100.dp)
                             .clickable {
+                                viewModel.putEnteredData(
+                                    title = textTitle,
+                                    textDescription = textDescription,
+                                    textPrice = textPrice
+                                )
                                 val cropOption =
                                     CropImageContractOptions(uriContent, CropImageOptions())
                                 imageCropLauncher.launch(cropOption)
