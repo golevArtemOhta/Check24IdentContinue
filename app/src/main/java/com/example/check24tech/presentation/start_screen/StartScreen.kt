@@ -25,22 +25,30 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Destination(start = true)
 @Composable
-fun StartScreen(navigator: DestinationsNavigator){
+fun StartScreen(navigator: DestinationsNavigator) {
     val context = LocalContext.current
     val isFirstItemAdded = PreferensHelper.isFirstItemAdded(context = context)
-    if (isFirstItemAdded){
+    if (isFirstItemAdded) {
         navigator.navigate(ItemsScreenDestination)
     }
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(Color.White),
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White),
         verticalArrangement = Arrangement.SpaceAround,
-        horizontalAlignment = Alignment.CenterHorizontally){
-        Image(modifier = Modifier.size(300.dp), painter = painterResource(id = R.drawable.check24_logo), contentDescription = stringResource(
-            id = R.string.logo_check24
-        ))
-        Button(onClick = { navigator.navigate(ItemsScreenDestination)},
-            colors = ButtonDefaults.buttonColors(Color.Blue)) {
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            modifier = Modifier.size(300.dp),
+            painter = painterResource(id = R.drawable.check24_logo),
+            contentDescription = stringResource(
+                id = R.string.logo_check24
+            )
+        )
+        Button(
+            onClick = { navigator.navigate(ItemsScreenDestination) },
+            colors = ButtonDefaults.buttonColors(Color.Blue)
+        ) {
             Text(text = stringResource(id = R.string.start))
         }
     }

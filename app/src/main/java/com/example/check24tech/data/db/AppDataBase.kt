@@ -9,7 +9,6 @@ import com.example.check24tech.data.model.SaleItemDto
 @TypeConverters(UriConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun itemsDao(): ItemsDao
-
 }
 
 

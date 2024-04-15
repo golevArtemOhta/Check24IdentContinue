@@ -180,12 +180,13 @@ fun NewItemScreen(
 
         if (bitmap != null) {
             Row {
-                bitmap?.asImageBitmap()?.let {bitmap ->
+                bitmap?.asImageBitmap()?.let { bitmap ->
                     Image(
                         modifier = Modifier
                             .size(100.dp)
                             .clickable {
-                                val cropOption = CropImageContractOptions(uriContent, CropImageOptions())
+                                val cropOption =
+                                    CropImageContractOptions(uriContent, CropImageOptions())
                                 imageCropLauncher.launch(cropOption)
                             },
                         bitmap = bitmap,
@@ -197,12 +198,17 @@ fun NewItemScreen(
                         modifier = Modifier
                             .size(100.dp)
                             .clickable {
-                                val cropOption = CropImageContractOptions(uriContent, CropImageOptions())
+                                val cropOption =
+                                    CropImageContractOptions(uriContent, CropImageOptions())
                                 imageCropLauncher.launch(cropOption)
                             },
                         bitmap = bitmap,
                         contentDescription = stringResource(id = R.string.photo),
-                        colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) })
+                        colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply {
+                            setToSaturation(
+                                0f
+                            )
+                        })
                     )
                 }
             }
@@ -214,7 +220,8 @@ fun NewItemScreen(
                         val permissionCheckResult =
                             ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
                         if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
-                            val cropOption = CropImageContractOptions(uriContent, CropImageOptions())
+                            val cropOption =
+                                CropImageContractOptions(uriContent, CropImageOptions())
                             imageCropLauncher.launch(cropOption)
                         } else {
                             // Request a permission

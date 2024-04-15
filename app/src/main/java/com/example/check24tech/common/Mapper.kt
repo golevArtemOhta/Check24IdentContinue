@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 interface Mapper<F, T> {
 
     fun mapFromDataToDomain(from: F): T
+
     fun mapFromDomainToData(from: T): F
 
     fun dataToDomainFlow(from: Flow<F>): Flow<T>
