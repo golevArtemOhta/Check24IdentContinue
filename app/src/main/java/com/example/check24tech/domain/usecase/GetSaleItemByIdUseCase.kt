@@ -1,9 +1,11 @@
 package com.example.check24tech.domain.usecase
 
+import com.example.check24tech.domain.Repository
 import com.example.check24tech.domain.model.SaleItemModel
 import kotlinx.coroutines.flow.Flow
 
-interface GetSaleItemByIdUseCase {
-
-    fun getSaleItemById(id: Int): Flow<SaleItemModel>
+class GetSaleItemByIdUseCase(private val repository: Repository) {
+    fun getSaleItemById(id: Int): Flow<SaleItemModel> {
+        return repository.getSaleItemById(id)
+    }
 }

@@ -5,10 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.check24tech.data.model.SaleItemDto
-import com.example.check24tech.data.usecase.InsertSaleItemUseCase
-import com.example.check24tech.data.usecase.UpdateSaleItemUseCase
-import com.example.check24tech.domain.model.SaleItemModel
 import com.example.check24tech.domain.usecase.GetSaleItemByIdUseCase
+import com.example.check24tech.domain.usecase.InsertSaleItemUseCase
+import com.example.check24tech.domain.usecase.UpdateSaleItemUseCase
+import com.example.check24tech.domain.model.SaleItemModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,19 +20,6 @@ class NewItemViewModel(
     private val updateSaleItemUseCase: UpdateSaleItemUseCase,
     private val getSaleItemByIdUseCase: GetSaleItemByIdUseCase,
 ) : ViewModel() {
-
-    private val _editSaleItemDto = MutableStateFlow<SaleItemDto?>(null)
-    val editSaleItemDto: StateFlow<SaleItemDto?>
-        get() = _editSaleItemDto
-
-    private val _title = mutableStateOf("")
-    val title: State<String> = _title
-
-    private val _description = mutableStateOf("")
-    val description: State<String> = _description
-
-    private val _price = mutableStateOf("0.0")
-    val price: State<String> = _price
 
     fun insertSaleItem(saleItemModel: SaleItemModel?) {
         if (saleItemModel == null) return
@@ -50,15 +37,5 @@ class NewItemViewModel(
 
     fun initId(id: Int): Flow<SaleItemModel> {
         return getSaleItemByIdUseCase.getSaleItemById(id)
-    }
-
-    fun putEnteredData(
-        title: String? = null,
-        textDescription: String? = null,
-        textPrice: String? = "0.0"
-    ) {
-        _title.value = title ?: ""
-        _description.value = textDescription ?: ""
-        _price.value = textPrice ?: "0.0"
     }
 }

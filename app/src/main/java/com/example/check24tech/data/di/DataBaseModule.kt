@@ -4,7 +4,7 @@ import androidx.room.Room
 import com.example.check24tech.data.db.AppDatabase
 import com.example.check24tech.data.repository.RepositoryImpl
 import com.example.check24tech.domain.Repository
-import com.example.check24tech.domain.mapper.SaleItemMapper
+import com.example.check24tech.data.mapper.SaleItemMapper
 import com.example.check24tech.utils.Constants
 import org.koin.dsl.module
 

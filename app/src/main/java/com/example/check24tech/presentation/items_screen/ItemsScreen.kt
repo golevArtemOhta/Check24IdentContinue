@@ -43,6 +43,7 @@ import com.example.reviewcodetechtask.R
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import org.koin.androidx.compose.koinViewModel
+import java.math.BigDecimal
 
 @Destination
 @Composable
@@ -61,7 +62,7 @@ fun ItemsScreen(navigator: DestinationsNavigator, viewModel: ItemsViewModel = ko
                         title = saleItem.title,
                         description = saleItem.description
                             ?: stringResource(id = R.string.without_description),
-                        price = saleItem.price ?: 0.0,
+                        price = saleItem.price ?: BigDecimal.ZERO,
                         image = saleItem.image,
                         clickByItem = {
                             navigator.navigate(NewItemScreenDestination(saleItemId = saleItem.id))
@@ -104,7 +105,7 @@ fun ItemsScreen(navigator: DestinationsNavigator, viewModel: ItemsViewModel = ko
 fun Item(
     title: String,
     description: String? = null,
-    price: Double? = 0.0,
+    price: BigDecimal? = BigDecimal.ZERO,
     image: Uri? = null,
     clickByItem: () -> Unit
 ) {

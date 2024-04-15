@@ -1,11 +1,12 @@
-package com.example.check24tech.domain.mapper
+package com.example.check24tech.data.mapper
 
+import com.example.check24tech.common.Mapper
 import com.example.check24tech.data.model.SaleItemDto
 import com.example.check24tech.domain.model.SaleItemModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class SaleItemMapper : com.example.check24tech.common.Mapper<SaleItemDto, SaleItemModel> {
+class SaleItemMapper : Mapper<SaleItemDto, SaleItemModel> {
     override fun mapFromDataToDomain(from: SaleItemDto): SaleItemModel {
         return SaleItemModel(
             id = from.id,

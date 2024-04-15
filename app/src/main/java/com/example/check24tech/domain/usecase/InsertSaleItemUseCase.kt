@@ -1,4 +1,4 @@
-package com.example.check24tech.data.usecase
+package com.example.check24tech.domain.usecase
 
 import com.example.check24tech.domain.Repository
 import com.example.check24tech.domain.model.SaleItemModel

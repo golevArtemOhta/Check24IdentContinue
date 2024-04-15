@@ -63,6 +63,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
+import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Objects
@@ -238,7 +239,7 @@ fun NewItemScreen(
                                 title = textTitle,
                                 description = textDescription.takeUnless { it.isNullOrEmpty() }
                                     ?: context.resources.getString(R.string.without_description),
-                                price = if (textPrice.isNotBlank()) textPrice.toDouble() else 0.0,
+                                price = if (textPrice.isNotBlank()) textPrice.toBigDecimal() else BigDecimal.ZERO,
                                 image = capturedImageUri
                             )
                         )
@@ -253,7 +254,7 @@ fun NewItemScreen(
                                 title = textTitle,
                                 description = textDescription.takeUnless { it.isNullOrEmpty() }
                                     ?: context.resources.getString(R.string.without_description),
-                                price = if (textPrice.isNotBlank()) textPrice.toDouble() else 0.0,
+                                price = if (textPrice.isNotBlank()) textPrice.toBigDecimal() else BigDecimal.ZERO,
                                 image = if (capturedImageUri?.path?.isNotEmpty() == true) {
                                     capturedImageUri
                                 } else {

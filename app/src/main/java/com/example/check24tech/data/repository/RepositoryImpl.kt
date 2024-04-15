@@ -3,7 +3,7 @@ package com.example.check24tech.data.repository
 import com.example.check24tech.data.db.ItemsDao
 import com.example.check24tech.domain.Repository
 import com.example.check24tech.data.model.SaleItemDto
-import com.example.check24tech.domain.mapper.SaleItemMapper
+import com.example.check24tech.data.mapper.SaleItemMapper
 import com.example.check24tech.domain.model.SaleItemModel
 import kotlinx.coroutines.flow.Flow
 
