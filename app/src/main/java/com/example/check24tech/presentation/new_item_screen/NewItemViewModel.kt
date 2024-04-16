@@ -21,10 +21,6 @@ class NewItemViewModel(
     private val getSaleItemByIdUseCase: GetSaleItemByIdUseCase,
 ) : ViewModel() {
 
-    private val _editSaleItemDto = MutableStateFlow<SaleItemDto?>(null)
-    val editSaleItemDto: StateFlow<SaleItemDto?>
-        get() = _editSaleItemDto
-
     private val _title = mutableStateOf("")
     val title: State<String> = _title
 
