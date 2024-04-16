@@ -228,14 +228,14 @@ fun NewItemScreen(
                 modifier = Modifier
                     .size(100.dp)
                     .clickable {
+                        viewModel.putEnteredData(
+                            title = textTitle,
+                            textDescription = textDescription,
+                            textPrice = textPrice
+                        )
                         val permissionCheckResult =
                             ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
                         if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
-                            viewModel.putEnteredData(
-                                title = textTitle,
-                                textDescription = textDescription,
-                                textPrice = textPrice
-                            )
                             val cropOption =
                                 CropImageContractOptions(uriContent, CropImageOptions())
                             imageCropLauncher.launch(cropOption)
